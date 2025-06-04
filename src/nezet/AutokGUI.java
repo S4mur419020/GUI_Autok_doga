@@ -14,7 +14,7 @@ import model.AutoInfok;
 
 public class AutokGUI extends javax.swing.JFrame {
 
-    public List<String> autok;
+    private List<AutoInfok> autok;
     public AutokGUI() {
         initComponents();
         autok = new ArrayList<>();
@@ -48,7 +48,12 @@ public class AutokGUI extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         mnuPrgBetoltes = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Autó adatok"));
 
@@ -74,6 +79,12 @@ public class AutokGUI extends javax.swing.JFrame {
         txtBorravlo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtBorravloActionPerformed(evt);
+            }
+        });
+
+        chbDohi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbDohiActionPerformed(evt);
             }
         });
 
@@ -205,7 +216,7 @@ public class AutokGUI extends javax.swing.JFrame {
                 String sor = sorok.get(i);
                 AutoInfok autoinf = new AutoInfok(sor);
                 autok.add(autoinf);
-                cmbRendszam.addItem(autoinf.getRendszam() + " / " + autoinf.getDatum());
+                cmbRendszam.addItem(autoinf.getRendszam());
             }
             megjelenites(autok.getFirst());
         } catch (IOException ex) {
@@ -223,9 +234,23 @@ public class AutokGUI extends javax.swing.JFrame {
         megjelenites(autoinf);
     }//GEN-LAST:event_cmbRendszamActionPerformed
 
+    private void chbDohiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbDohiActionPerformed
+        int i = 0, N = autok.size();
+        while(i < N && !(autok.get(i).isDohanyzik())){
+            i++;
+        }
+        return;
+    }//GEN-LAST:event_chbDohiActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        int kilep = JOptionPane.showConfirmDialog(rootPane, "Biztosan ki akarsz lepni?","Kilépes",JOptionPane.YES_OPTION);
+        if (kilep == JOptionPane.YES_OPTION ) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
     private void megjelenites(AutoInfok autoinf){
-        cmbRendszam(autoinf.getRendszam());
-        txtDatum.setText(autoinf.getDatum());
+        txtDatum.setText(autoinf.getDatum()+"");
         txtFizmod.setText(autoinf.getFizmod());
         txtTav.setText(autoinf.getTav()+"");
         txtOsszeg.setText(autoinf.getOsszeg()+"");
@@ -234,26 +259,8 @@ public class AutokGUI extends javax.swing.JFrame {
         
     }    
     
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        int kilep = JOptionPane.showConfirmDialog(rootPane, "Biztosan ki akarsz lepni?","Kilépes",JOptionPane.YES_NO_CANCEL_OPTION);
-        if (kilep == JOptionPane.YES_NO_CANCEL_OPTION ) {
-            System.exit(0);
-        }
-    }
-    private List<String> kikDolgoztak(String datum)
-    {
-        List<String> dolgoztak = new ArrayList<>();
-        
-        for (int i = 0; i < autok.size(); i++) 
-        {
-            if(autok.get(i).getMikor().equals(datum) && !(dolgoztak.contains(autok.get(i).getRendszam())))
-            {
-                dolgoztak.add(autok.get(i).getRendszam());
-            }
-        }
-        //System.out.println(dolgoztak);
-        return dolgoztak;
-    }
+   
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
