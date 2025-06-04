@@ -1,11 +1,14 @@
 
 package nezet;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import main.FajlFelosztas;
 import model.AutoInfok;
 
@@ -14,6 +17,7 @@ public class AutokGUI extends javax.swing.JFrame {
     public List<String> autok;
     public AutokGUI() {
         initComponents();
+        autok = new ArrayList<>();
     }
 
     /**
@@ -36,7 +40,7 @@ public class AutokGUI extends javax.swing.JFrame {
         txtTav = new javax.swing.JTextField();
         txtOsszeg = new javax.swing.JTextField();
         txtBorravlo = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        chbDohi = new javax.swing.JCheckBox();
         txtFizmod = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         cmbRendszam = new javax.swing.JComboBox<>();
@@ -77,6 +81,12 @@ public class AutokGUI extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Rendszám"));
 
+        cmbRendszam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbRendszamActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -106,7 +116,7 @@ public class AutokGUI extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(jCheckBox1)
+                        .addComponent(chbDohi)
                         .addGap(9, 9, 9))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
@@ -152,7 +162,7 @@ public class AutokGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
-                    .addComponent(jCheckBox1))
+                    .addComponent(chbDohi))
                 .addGap(89, 89, 89))
         );
 
@@ -189,16 +199,16 @@ public class AutokGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuPrgBetoltesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPrgBetoltesActionPerformed
-        try {
-            List<String>sorok=Files.readAllLines(Path.of("fuvarok.txt"));
-            
-            
+       try {
+            List<String> sorok = Files.readAllLines(Path.of("fuvarok.txt"));
             for (int i = 2; i < sorok.size(); i++) {
-                String sor=sorok.get(i);
-                AutoInfok autoinf=new AutoInfok(sor);
-                
+                String sor = sorok.get(i);
+                AutoInfok autoinf = new AutoInfok(sor);
+                autok.add(autoinf);
+                cmbRendszam.addItem(autoinf.getRendszam() + " / " + autoinf.getDatum());
             }
-        } catch (Exception ex) {
+            megjelenites(autok.getFirst());
+        } catch (IOException ex) {
             Logger.getLogger(AutokGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_mnuPrgBetoltesActionPerformed
@@ -207,15 +217,43 @@ public class AutokGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBorravloActionPerformed
 
+    private void cmbRendszamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRendszamActionPerformed
+        int i = cmbRendszam.getSelectedIndex();
+        AutoInfok autoinf = autok.get(i);
+        megjelenites(autoinf);
+    }//GEN-LAST:event_cmbRendszamActionPerformed
+
     private void megjelenites(AutoInfok autoinf){
         cmbRendszam(autoinf.getRendszam());
         txtDatum.setText(autoinf.getDatum());
         txtFizmod.setText(autoinf.getFizmod());
-        txtTav.setText(autoinf.getTav());
-        txtOsszeg.setText(autoinf.getOsszeg());
-        txtBorravlo.setText(autoinf.getBorravalo());
+        txtTav.setText(autoinf.getTav()+"");
+        txtOsszeg.setText(autoinf.getOsszeg()+"");
+        txtBorravlo.setText(autoinf.getBorravalo()+"");
+        chbDohi.setSelected(autoinf.isDohanyzik());
+        
     }    
     
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        int kilep = JOptionPane.showConfirmDialog(rootPane, "Biztosan ki akarsz lepni?","Kilépes",JOptionPane.YES_NO_CANCEL_OPTION);
+        if (kilep == JOptionPane.YES_NO_CANCEL_OPTION ) {
+            System.exit(0);
+        }
+    }
+    private List<String> kikDolgoztak(String datum)
+    {
+        List<String> dolgoztak = new ArrayList<>();
+        
+        for (int i = 0; i < autok.size(); i++) 
+        {
+            if(autok.get(i).getMikor().equals(datum) && !(dolgoztak.contains(autok.get(i).getRendszam())))
+            {
+                dolgoztak.add(autok.get(i).getRendszam());
+            }
+        }
+        //System.out.println(dolgoztak);
+        return dolgoztak;
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -250,8 +288,8 @@ public class AutokGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chbDohi;
     private javax.swing.JComboBox<String> cmbRendszam;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
