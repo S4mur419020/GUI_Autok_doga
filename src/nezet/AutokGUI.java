@@ -4,11 +4,15 @@ package nezet;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import main.FajlFelosztas;
+import model.AutoInfok;
 
-public class nezetGUI extends javax.swing.JFrame {
+public class AutokGUI extends javax.swing.JFrame {
 
     public List<String> autok;
-    public nezetGUI() {
+    public AutokGUI() {
         initComponents();
     }
 
@@ -175,7 +179,15 @@ public class nezetGUI extends javax.swing.JFrame {
     private void mnuPrgBetoltesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPrgBetoltesActionPerformed
         try {
             List<String>sorok=Files.readAllLines(Path.of("fuvarok.txt"));
-        } catch (Exception e) {
+            
+            
+            for (int i = 2; i < sorok.size(); i++) {
+                String sor=sorok.get(i);
+                AutoInfok autoinokf=new AutoInfok(sor);
+                
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AutokGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_mnuPrgBetoltesActionPerformed
 
@@ -196,20 +208,21 @@ public class nezetGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(nezetGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AutokGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(nezetGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AutokGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(nezetGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AutokGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(nezetGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AutokGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new nezetGUI().setVisible(true);
+                new AutokGUI().setVisible(true);
             }
         });
     }
