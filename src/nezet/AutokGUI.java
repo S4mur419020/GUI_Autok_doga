@@ -29,6 +29,7 @@ public class AutokGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -47,6 +48,11 @@ public class AutokGUI extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuPrgBetoltes = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem3 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem4 = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -189,6 +195,37 @@ public class AutokGUI extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setText("Feladatok");
+
+        buttonGroup1.add(jCheckBoxMenuItem1);
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("osszbevetel xyz-456");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jCheckBoxMenuItem1);
+
+        buttonGroup1.add(jCheckBoxMenuItem2);
+        jCheckBoxMenuItem2.setText("lehet dohanyozni");
+        jCheckBoxMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jCheckBoxMenuItem2);
+
+        buttonGroup1.add(jCheckBoxMenuItem3);
+        jCheckBoxMenuItem3.setText("legh.fuvar");
+        jMenu2.add(jCheckBoxMenuItem3);
+
+        buttonGroup1.add(jCheckBoxMenuItem4);
+        jCheckBoxMenuItem4.setText("kik dolgoztak");
+        jMenu2.add(jCheckBoxMenuItem4);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -225,7 +262,7 @@ public class AutokGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuPrgBetoltesActionPerformed
 
     private void txtBorravloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBorravloActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtBorravloActionPerformed
 
     private void cmbRendszamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRendszamActionPerformed
@@ -235,13 +272,16 @@ public class AutokGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbRendszamActionPerformed
 
     private void chbDohiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbDohiActionPerformed
-        int i = 0, N = autok.size();
-        while(i < N && !(autok.get(i).isDohanyzik())){
+        JOptionPane.showMessageDialog(rootPane, "%s lehet minden autóban dohányozni.".formatted(dohanyzas()?"Nem":"Igen, "));
+    }//GEN-LAST:event_chbDohiActionPerformed
+    private boolean dohanyzas(){
+        int hossz = autok.size();
+        int i = 0;
+        while( i < hossz && autok.get(i).isDohanyzik()){
             i++;
         }
-        return;
-    }//GEN-LAST:event_chbDohiActionPerformed
-
+        return i < hossz;
+    }
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         int kilep = JOptionPane.showConfirmDialog(rootPane, "Biztosan ki akarsz lepni?","Kilépes",JOptionPane.YES_OPTION);
         if (kilep == JOptionPane.YES_OPTION ) {
@@ -249,8 +289,26 @@ public class AutokGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+       String rendszam = "xyz-456";
+        JOptionPane.showMessageDialog(rootPane, "Az %s rendszám autó összbevetele: %d Ft".formatted(rendszam,osszbevetel(rendszam)));
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void jCheckBoxMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem2ActionPerformed
+        
+    }//GEN-LAST:event_jCheckBoxMenuItem2ActionPerformed
+    
+    private int osszbevetel(String rendszam){
+    int osszbevetel = 0;
+        for (int i = 0; i < autok.size(); i++) {
+            if (autok.get(i).getRendszam().equals(rendszam)) {
+                osszbevetel += autok.get(i).getOsszeg() + autok.get(i).getBorravalo();
+            }
+        }
+        return osszbevetel;
+    }
     private void megjelenites(AutoInfok autoinf){
-        txtDatum.setText(autoinf.getDatum()+"");
+        txtDatum.setText(autoinf.getDatum());
         txtFizmod.setText(autoinf.getFizmod());
         txtTav.setText(autoinf.getTav()+"");
         txtOsszeg.setText(autoinf.getOsszeg()+"");
@@ -295,8 +353,13 @@ public class AutokGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chbDohi;
     private javax.swing.JComboBox<String> cmbRendszam;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem3;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem4;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -304,6 +367,7 @@ public class AutokGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

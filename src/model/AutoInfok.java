@@ -4,7 +4,7 @@ package model;
 
 public class AutoInfok {
     private String rendszam;
-    private int datum;
+    private String datum;
     private String fizmod;
     private double tav ;
     private int osszeg;
@@ -15,7 +15,7 @@ public class AutoInfok {
      public AutoInfok(String sor) {
         String[] adatok = sor.split(";");
         rendszam= adatok[0];
-        datum= Integer.parseInt(adatok[1]);
+        datum= adatok[1];
         fizmod=adatok[2];
         tav=Double.parseDouble(adatok[3]);
         osszeg=Integer.parseInt(adatok[4]);
@@ -23,7 +23,7 @@ public class AutoInfok {
         dohanyzik=Boolean.parseBoolean(adatok[6]);
     }
 
-    public AutoInfok(String rendszam, int datum, String fizmod, double tav, int osszeg, int borravalo, boolean dohanyzik) {
+    public AutoInfok(String rendszam, String datum, String fizmod, double tav, int osszeg, int borravalo, boolean dohanyzik) {
         this.rendszam = rendszam;
         this.datum = datum;
         this.fizmod = fizmod;
@@ -37,7 +37,7 @@ public class AutoInfok {
         return rendszam;
     }
 
-    public int getDatum() {
+    public String getDatum() {
         return datum;
     }
 
